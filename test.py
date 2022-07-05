@@ -3,7 +3,7 @@ import json
 import requests
 import os
 
-token = os.environ['DUSTICO_API_TOKEN']
+token = os.environ.get('DUSTICO_API_TOKEN')
 
 
 
