@@ -10,7 +10,7 @@ token = os.environ.get('DUSTICO_API_TOKEN')
 url = "https://api.dusti.co/v1/packages"
 
 headers = {
-    "Authorization": f"token {token}"
+    "Authorization": "token " + token
 }
 data = [
     {
