@@ -36,6 +36,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       env:
+        DUSTICO_API_TOKEN: ${{ secrets.DUSTICO_API_TOKEN }}
         TEST_SECRET: ${{ secrets.TEST_SECRET }}
       run: |
         python test.py
