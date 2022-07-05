@@ -2,8 +2,12 @@ import keyring
 import json
 import requests
 import os
+import pdfkit
+
 
 token = os.environ.get('DUSTICO_API_TOKEN')
+
+pdfkit.from_file('template.html', 'out.pdf')
 
 
 
