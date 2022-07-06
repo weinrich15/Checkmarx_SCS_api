@@ -45,5 +45,7 @@ r = requests.post(url, json=scs_data, headers=headers)
 r.raise_for_status()
 print(json.dumps(r.json(), indent=2))
 
-
+# Write Results out to a Json File
+with open('scs_results.json','w') as outfile:
+    json.dump(r.json(),outfile)
 #testings stuff
