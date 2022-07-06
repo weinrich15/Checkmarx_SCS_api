@@ -2,7 +2,6 @@ import keyring
 import json
 import requests
 import os
-import wkhtmltopdf
 import pdfkit
 
 
