@@ -45,3 +45,5 @@ jobs:
         TEST_SECRET: ${{ secrets.TEST_SECRET }}
       run: |
         python test.py
+        sudo cd scs_outputs
+        sudo ls
