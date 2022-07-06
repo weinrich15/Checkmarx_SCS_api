@@ -8,6 +8,7 @@ import pdfkit
 token = os.environ.get('DUSTICO_API_TOKEN')
 
 print(pdfkit.from_file('template.html', 'out.pdf'))
+print('test12')
 
 
 
