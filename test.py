@@ -11,7 +11,7 @@ options = {
   "enable-local-file-access": None
 }
 
-print(pdfkit.from_file('template.html', '~/scs_outputs/out.pdf',options=options))
+print(pdfkit.from_file('template.html', '/scs_outputs/out.pdf',options=options))
 print('test12')
 
 
