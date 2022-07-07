@@ -12,7 +12,7 @@ options = {
 }
 
 print(pdfkit.from_file('template.html', 'out.pdf',options=options))
-print('test12')
+
 
 
 
