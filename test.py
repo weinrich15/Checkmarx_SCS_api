@@ -4,10 +4,14 @@ import requests
 import os
 import pdfkit
 
+token = keyring.get_password(u":local-database:scs", u"token")
+# token = os.environ.get('DUSTICO_API_TOKEN')
 
-token = os.environ.get('DUSTICO_API_TOKEN')
+options = {
+  "enable-local-file-access": None
+}
 
-print(pdfkit.from_file('template.html', 'scs_outputs\out.pdf'))
+print(pdfkit.from_file('template.html', 'out.pdf',options=options))
 print('test12')
 
 
@@ -46,6 +50,6 @@ r.raise_for_status()
 print(json.dumps(r.json(), indent=2))
 
 # Write Results out to a Json File
-with open('scs_outputs/scs_results.json','w') as outfile:
+with open('scs_results.json','w') as outfile:
     json.dump(r.json(),outfile)
 #testings stuff
