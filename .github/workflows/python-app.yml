@@ -51,7 +51,7 @@ jobs:
         git add --all
         git commit -m "Add changes" -a
     - name: Push changes
-      permissions: read-all|write-all
+      permissions: write-all
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
