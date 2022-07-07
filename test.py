@@ -3,6 +3,7 @@ import json
 import requests
 import os
 import pdfkit
+import markdown
 
 # token = keyring.get_password(u":local-database:scs", u"token")
 token = os.environ.get('DUSTICO_API_TOKEN')
@@ -53,3 +54,4 @@ print(json.dumps(r.json(), indent=2))
 with open('scs_results.json','w') as outfile:
     json.dump(r.json(),outfile)
 #testings stuff
+
