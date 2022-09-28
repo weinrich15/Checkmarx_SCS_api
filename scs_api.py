@@ -38,7 +38,7 @@ import os
 # url = keyring.get_password(u":local-database:scs-url", u"url")
 # manifest_path = 'package.json'
 
-# NAme of the Results File.  Default is scs_results.json
+# Name of the Results File.  Default is scs_results.json
 results_fileName = 'scs_results.json'
 
 # Github Actions
