@@ -14,5 +14,8 @@ User can define:
 - The path of the package.json
 - The path and name of the results file(must be a .json to work properly.
 
+### Known Issues
+*It's a feature, not a bug* ¯\_(ツ)_/¯ - The Github Action will fail if there are no changes to the results file.
+
 ### Future updates: 
 Hoping to include other manifest files and also include html and pdf options!
