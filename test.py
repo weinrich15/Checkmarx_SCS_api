@@ -1,73 +1,100 @@
+# !/usr/bin/env python
+# -*- coding: utf-8 -*-
+# -----------------------------------------------------------------
+# _Description_ = Simple Python script to call the dustico scs api.  
+# _Version_ =  1.0.0
+# _Author_ = Sean Casey
+# _Credits_ = [Jossef Harush, Tzachi Zorenshtain, Checkmarx SCS Team]
+# _Status_ = Development
+# -----------------------------------------------------------------
+
 import keyring
 import json
 import requests
 import os
-import pdfkit
-import markdown
-import fileinput
-
-# token = keyring.get_password(u":local-database:scs", u"token")
-token = os.environ.get('DUSTICO_API_TOKEN')
-
-options = {
-  "enable-local-file-access": None
-}
 
 
-url = "https://api.dusti.co/v1/packages"
+# ***** Description *****
+# Simple Python script to call the dustico scs api.  Currently only using package.json as the manifest file.
+# The script takes the dependencies json from the package.json and converts it into an acceptable format for the body of the api request.
+# User can define the path of the package.json and the results file.
+# Future updates: hoping to include other manifest files and also include html and pdf options!
+# **********************
+# _Version_ =  1.0.0
+# _Author_ = Sean Casey
+# _Status_ = Development
+
+
+
+
+# SECRETS 
+# - When local I am using Windows Credentials with keyring
+# - Secrets are also stored in Github for Github Actions
+# - Using os.environ with Windows Environment variables is not secure
+# - Comment out the secrets declarations depending on what you are doing
+
+# Keyring Secrets
+token = keyring.get_password(u":local-database:scs", u"token")
+url = keyring.get_password(u":local-database:scs-url", u"url")
+manifestPath = 'package.json'
+
+# NAme of the Results File.  Default is scs_results.json
+resultsFileName = 'scs_results.json'
+
+# Github Actions
+# token = os.environ.get('DUSTICO_API_TOKEN')
+# url = os.environ.get('DUSTICO_API_URL')
+# manifestPath = os.environ.get('MANIFEST_PATH')
+# resultsFileName = os.environ.get('RESULTS_FILE_NAME')
+
+# Empty list to store the converted json for the API request.
+scs_data = []
 
 headers = {
     "Authorization": "token " + token
 }
 
-# Opening JSON file
-f = open('package.json')
+try:
+    # Opening JSON file
+    f = open(manifestPath)
+    # returns JSON object as a dictionary
+    data = json.load(f)  
+
+except:
+    print('Cannot find the package.json.  Please check the manifestPath')
   
-# returns JSON object as 
-# a dictionary
-data = json.load(f)
-scs_data = []
 
-data2 = data['dependencies']
+try:
+    dependencies = data['dependencies']
+except:
+    print('No dependencies were found. Check the manifest file.')
 
-for key in data2:
+
+for key in dependencies:
     
-    scs_data.append({"name": key,"type": "npm","version": data2[key]})
+    scs_data.append({"name": key,"type": "npm","version": dependencies[key]})
     
     pass
 
-data = [
-    {
-        "name": "node-ipc",
-        "type": "npm",
-        "version": "9.2.2",
-    }
-]
-r = requests.post(url, json=scs_data, headers=headers)
-r.raise_for_status()
-print(json.dumps(r.json(), indent=2))
+try:
+    r = requests.post(url, json=scs_data, headers=headers)
+    r.raise_for_status()
+    print(json.dumps(r.json(), indent=2))
+except:
+    print('Something went wrong')
 
-md = markdown.Markdown()
-
-# Write Results out to a Json File
-with open('scs_results.json','w') as outfile:
-    json.dump(r.json(),outfile)
-#testings stuff
-
-packageContent = ''
-for a in r.json():
-    # print(a['name'])
-    packageContent = packageContent + '<div class="package-container"><div class="package-header"><div class="package-icon"><img src="images/npm-logo.png" /></div><div class="package-title"><h1>' + a['name'] + '</h1><h3>' + a['version'] + '</h3></div></div></div>'
-
-    if len(a['risks']):
-        for x in a['risks']:
-            test44 = md.convert(x['description'])
-            print(test44)
+try:
+    # Write Results out to a Json File
+    with open(resultsFileName,'w') as outfile:
+        json.dump(r.json(),outfile)
+except:
+    print('There was an issue writing out to the results file')
+    print('please make sure the results file is in a folder that has write permissions and the resultsFileName is a .json file')
 
 
-with fileinput.FileInput('template.html', inplace=True, backup='.bak') as file:
-    for line in file:
-        print(line.replace('<p>test</p>', packageContent), end='')
 
 
-print(pdfkit.from_file('template.html', 'out.pdf',options=options))
+
+
+
+
