@@ -45,6 +45,7 @@ jobs:
         # Currently only using npm, package.json on the first iteration
         # Manifest Path will be the full path to the package.json file
         MANIFEST_PATH: "package.json"
+        RESULTS_FILE_NAME: "scs_results"
       run: |
         python test.py
     - name: Commit files

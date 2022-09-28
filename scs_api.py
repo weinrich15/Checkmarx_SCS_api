@@ -34,18 +34,22 @@ import os
 # - Comment out the secrets declarations depending on what you are doing
 
 # Keyring Secrets
-token = keyring.get_password(u":local-database:scs", u"token")
-url = keyring.get_password(u":local-database:scs-url", u"url")
-manifestPath = 'package.json'
+# token = keyring.get_password(u":local-database:scs", u"token")
+# url = keyring.get_password(u":local-database:scs-url", u"url")
+# manifest_path = 'package.json'
 
 # NAme of the Results File.  Default is scs_results.json
-resultsFileName = 'scs_results.json'
+results_fileName = 'scs_results.json'
 
 # Github Actions
-# token = os.environ.get('DUSTICO_API_TOKEN')
-# url = os.environ.get('DUSTICO_API_URL')
-# manifestPath = os.environ.get('MANIFEST_PATH')
-# resultsFileName = os.environ.get('RESULTS_FILE_NAME')
+token = os.environ.get('DUSTICO_API_TOKEN')
+url = os.environ.get('DUSTICO_API_URL')
+manifest_path = os.environ.get('MANIFEST_PATH')
+results_fileName = os.environ.get('RESULTS_FILE_NAME')
+
+if not results_fileName:
+    results_fileName = "scs_results.json"
+
 
 # Empty list to store the converted json for the API request.
 scs_data = []
@@ -56,7 +60,7 @@ headers = {
 
 try:
     # Opening JSON file
-    f = open(manifestPath)
+    f = open(manifest_path)
     # returns JSON object as a dictionary
     data = json.load(f)  
 
@@ -85,7 +89,7 @@ except:
 
 try:
     # Write Results out to a Json File
-    with open(resultsFileName,'w') as outfile:
+    with open(results_fileName,'w') as outfile:
         json.dump(r.json(),outfile)
 except:
     print('There was an issue writing out to the results file')
