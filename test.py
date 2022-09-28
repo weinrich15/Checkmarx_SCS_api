@@ -4,6 +4,7 @@ import requests
 import os
 import pdfkit
 import markdown
+import fileinput
 
 # token = keyring.get_password(u":local-database:scs", u"token")
 token = os.environ.get('DUSTICO_API_TOKEN')
@@ -11,10 +12,6 @@ token = os.environ.get('DUSTICO_API_TOKEN')
 options = {
   "enable-local-file-access": None
 }
-
-print(pdfkit.from_file('template.html', 'out.pdf',options=options))
-
-
 
 
 url = "https://api.dusti.co/v1/packages"
@@ -50,8 +47,27 @@ r = requests.post(url, json=scs_data, headers=headers)
 r.raise_for_status()
 print(json.dumps(r.json(), indent=2))
 
+md = markdown.Markdown()
+
 # Write Results out to a Json File
 with open('scs_results.json','w') as outfile:
     json.dump(r.json(),outfile)
 #testings stuff
 
+packageContent = ''
+for a in r.json():
+    # print(a['name'])
+    packageContent = packageContent + '<div class="package-container"><div class="package-header"><div class="package-icon"><img src="images/npm-logo.png" /></div><div class="package-title"><h1>' + a['name'] + '</h1><h3>' + a['version'] + '</h3></div></div></div>'
+
+    if len(a['risks']):
+        for x in a['risks']:
+            test44 = md.convert(x['description'])
+            print(test44)
+
+
+with fileinput.FileInput('template.html', inplace=True, backup='.bak') as file:
+    for line in file:
+        print(line.replace('<p>test</p>', packageContent), end='')
+
+
+print(pdfkit.from_file('template.html', 'out.pdf',options=options))
