@@ -54,7 +54,16 @@ jobs:
         git config --local user.name "github-actions[bot]"
         git add --all
         git commit -m "Add changes" -a
+    - name: Changed Files
+      uses: tj-actions/changed-files@v31.0.1
+      id: changed-files-specific
+        uses: tj-actions/changed-files@v31
+        with:
+          files: |
+            */**
+
     - name: Push changes
+      if: steps.changed-files-specific.outputs.any_changed == 'true'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
